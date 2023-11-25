@@ -4,79 +4,126 @@ import { mainColor, whiteColor } from '../../styles'
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import Checkbox from 'expo-checkbox';
 import { styles } from '../../styles'
-
+import { KeyboardAvoidingView } from 'react-native';
+import { ScrollView, TouchableWithoutFeedback } from 'react-native-gesture-handler';
+import { Keyboard } from 'react-native';
+import { loginRequest } from '../../axios/auth';
+import { useDispatch, useSelector } from 'react-redux';
+import { loginAction, updateTokenAction } from '../../redux/actions/user';
 function LoginScreen() {
-    const [password, setPassword] = useState('');
+    const [password, setPassword] = useState("");
+    const [email, setEmail] = useState("");
     const [showPassword, setShowPassword] = useState(false);
-    const [isChecked, setChecked] = useState(false);
-
+    const [isChecked, setChecked] = useState(false); 
     const toggleShowPassword = () => {
         setShowPassword(!showPassword);
     };
+    const dispatch = useDispatch()
+    const user = useSelector(state => state.user)
     return (
-        <View style={styles.containerLogin}>
-            <Image source={require('../../assets/logoColored.png')}
-                style={styles.imageLogin}
-                resizeMode="contain"
+      <KeyboardAvoidingView
+        behavior={"height"}
+        enabled={true}
+        style={styles.containerLogin}
+      >
+        <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+          <ScrollView contentContainerStyle={styles.loginFormContainer}>
+            <Image
+              source={require("../../assets/logoColored.png")}
+              style={styles.imageLogin}
+              resizeMode="contain"
             />
             <TextInput
-                style={styles.emailInput}
-                placeholder="Email"
-                placeholderTextColor="rgba(117, 119, 132, 0.5)"
+              style={styles.emailInput}
+              onChangeText={(v) => setEmail(v)}
+              placeholder="Email"
+              placeholderTextColor="rgba(117, 119, 132, 0.5)"
             />
             <View style={styles.containerOfPasswordInput}>
-                <TextInput
-                    secureTextEntry={!showPassword}
-                    style={{ width: 140, }}
-                    placeholder="Mot de passe"
-                    placeholderTextColor="rgba(117, 119, 132, 0.5)"
-
-                />
-                <MaterialCommunityIcons
-                    name={showPassword ? 'eye-off' : 'eye'}
-                    size={24}
-                    color="#aaa"
-                    style={{ marginLeft: 92 }}
-                    onPress={toggleShowPassword}
-                />
+              <TextInput
+                secureTextEntry={!showPassword}
+                style={{ width: 140 }}
+                placeholder="Mot de passe"
+                placeholderTextColor="rgba(117, 119, 132, 0.5)"
+                onChangeText={(v) => setPassword(v)}
+              />
+              <MaterialCommunityIcons
+                name={showPassword ? "eye-off" : "eye"}
+                size={24}
+                color="#aaa"
+                style={{ marginLeft: 92 }}
+                onPress={toggleShowPassword}
+              />
             </View>
-            <View style={{ flexDirection: 'row', marginTop: 12, alignItems: 'center', width: 250, marginBottom: '7%', marginTop: '4%' }}>
-                <Checkbox
-                    style={{
-                        marginRight: 12,
-                        width: 14,
-                        height: 14
-                    }}
-                    value={isChecked}
-                    onValueChange={setChecked}
-                    color={isChecked ? mainColor : undefined}
-                />
-                <Text style={{ color: '#616161', fontSize: 12, fontWeight: 300, }} >Gardez-moi connecté</Text>
-
+            <View
+              style={{
+                flexDirection: "row",
+                marginTop: 12,
+                alignItems: "center",
+                width: 250,
+                marginBottom: "7%",
+                marginTop: "4%",
+              }}
+            >
+              <Checkbox
+                style={{
+                  marginRight: 12,
+                  width: 14,
+                  height: 14,
+                }}
+                value={isChecked}
+                onValueChange={setChecked}
+                color={isChecked ? mainColor : undefined}
+              />
+              <Text style={{ color: "#616161", fontSize: 12, fontWeight: 300 }}>
+                Gardez-moi connecté
+              </Text>
             </View>
-            <View style={{ flexDirection: 'row', marginTop: 12, alignItems: 'center', justifyContent: 'space-between', width: 250 }}>
-                <Pressable style={{
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    paddingVertical: 12,
-                    paddingHorizontal: 14,
-                    borderRadius: 4,
-                    backgroundColor: mainColor,
-                }} >
-                    <Text style={{
-                        fontSize: 13,
-                        lineHeight: 21,
-                        fontWeight: 400,
-                        color: 'white',
-                    }}>Se connecter</Text>
-                </Pressable>
-                <Pressable >
-                    <Text style={{ color: mainColor, fontSize: 12, fontWeight: 400, }} >Mot de passe oublié?</Text>
-                </Pressable>
+            <View
+              style={{
+                flexDirection: "row",
+                marginTop: 12,
+                alignItems: "center",
+                justifyContent: "space-between",
+                width: 250,
+              }}
+            >
+              <Pressable
+                style={{
+                  alignItems: "center",
+                  justifyContent: "center",
+                  paddingVertical: 12,
+                  paddingHorizontal: 14,
+                  borderRadius: 4,
+                  backgroundColor: mainColor,
+                }}
+                onPress={() => {
+                    loginRequest({ email, password }).then((res) => { dispatch(loginAction(res.data.user)); dispatch(updateTokenAction(res.data.tokens)); console.log(user) }).catch((err) => {});
+                }}
+              >
+                <Text
+                  style={{
+                    fontSize: 13,
+                    lineHeight: 21,
+                    fontWeight: 400,
+                    color: "white",
+                  }}
+                >
+                  Se connecter
+                </Text>
+              </Pressable>
+              <Pressable>
+                <Text
+                  style={{ color: mainColor, fontSize: 12, fontWeight: 400 }}
+                >
+                  Mot de passe oublié?
+                </Text>
+              </Pressable>
             </View>
-
-        </View>
-    )
+          </ScrollView>
+        </TouchableWithoutFeedback>
+      </KeyboardAvoidingView>
+    );
 }
 
 export default LoginScreen
