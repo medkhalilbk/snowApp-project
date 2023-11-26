@@ -1,5 +1,5 @@
 import axios from "axios"; 
 
 
-export const baseUrl = "http://192.168.1.8:3000";
+export const baseUrl = "http://192.168.1.31:3000";
 
