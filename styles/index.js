@@ -31,7 +31,7 @@ export const styles = StyleSheet.create({
     backgroundColor: whiteColor,
   },
   imageLogin: {
-    width: 230,
+    width: 250,
     height: 250,
     marginTop: "30%",
     marginBottom: "5%",
@@ -55,4 +55,31 @@ export const styles = StyleSheet.create({
     borderColor: "#AFAFAF",
     paddingLeft: 10,
   },
+  textInForgetPassword : {
+    color:"#2D57A3",
+    fontSize:20,
+    fontWeight:"400",
+    fontFamily: "Poppins",
+    textAlign:"center"
+  },
+  subtitleInForgetPassword:{
+    textAlign:"center",
+    color:"#333333",
+    fontSize:12,
+    margin:12,
+  },
+  buttonSeConnecter:{
+    alignItems: "center",
+    justifyContent: "center",
+    paddingVertical: 12,
+    paddingHorizontal: 14,
+    borderRadius: 4,
+    backgroundColor: mainColor,
+  },
+  textSeConnecter:{
+    fontSize: 14,
+    lineHeight: 21,
+    fontWeight: "500",
+    color: "white",
+  }
 });

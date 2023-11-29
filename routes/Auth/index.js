@@ -4,6 +4,7 @@ import LoginScreen from "../../screens/loginScreen";
 const Stack = createStackNavigator();
 import React from "react";
 import { useSelector } from "react-redux";
+import ForgetPassword from "../../screens/resetPasswordScreen";
 export default function AuthStack({ navigation }) {
 const [isLoading, setIsLoading] = React.useState(true)
 
@@ -24,12 +25,22 @@ console.log(userInfos);
           name="splashScreen"
           component={SplashScreen}
           options={{ headerShown: false }}
+          
         />
       )}
       <Stack.Screen
         name="LoginScreen"
         component={LoginScreen}
         options={{ headerShown: false }}
+        navigation={navigation}
+
+      />
+       <Stack.Screen
+        name="ForgetPassword"
+        component={ForgetPassword}
+        options={{ headerShown: false }}
+        navigation={navigation}
+
       />
     </Stack.Navigator>
   );

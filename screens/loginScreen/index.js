@@ -10,7 +10,7 @@ import { Keyboard } from 'react-native';
 import { loginRequest } from '../../axios/auth';
 import { useDispatch, useSelector } from 'react-redux';
 import { loginAction, updateTokenAction } from '../../redux/actions/user';
-function LoginScreen() {
+function LoginScreen({navigation}) {
   const [password, setPassword] = useState("");
   const [email, setEmail] = useState("");
   const [showPassword, setShowPassword] = useState(false);
@@ -91,14 +91,7 @@ function LoginScreen() {
             }}
           >
             <Pressable
-              style={{
-                alignItems: "center",
-                justifyContent: "center",
-                paddingVertical: 12,
-                paddingHorizontal: 14,
-                borderRadius: 4,
-                backgroundColor: mainColor,
-              }}
+              style={styles.buttonSeConnecter}
               onPress={() => {
                 loginRequest({ email, password }).then((res) => {
                   dispatch(loginAction(res.data.user));
@@ -124,7 +117,7 @@ function LoginScreen() {
                 Se connecter
               </Text>
             </Pressable>
-            <Pressable>
+            <Pressable onPress={() => navigation.navigate('ForgetPassword')}>
               <Text
                 style={{ color: mainColor, fontSize: 12, fontWeight: 400 }}
               >
