@@ -4,7 +4,7 @@ import { styles } from '../../styles'
 import { TextInput } from 'react-native-gesture-handler'
 
 
-export default function ForgetPassword() {
+export default function ForgetPassword({navigation}) {
     return (
         <View style={styles.loginFormContainer}>
             <Image
@@ -24,6 +24,7 @@ export default function ForgetPassword() {
             placeholderTextColor={errorCatched ? 'rgba(248, 109, 109, 0.71)' : "rgba(117, 119, 132, 0.5)"} */
             />
             <Pressable
+                onPress={() => navigation.navigate('newPassword')}
                 style={styles.buttonSeConnecter}>
                 <Text
                     style={styles.textSeConnecter}

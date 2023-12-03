@@ -5,6 +5,7 @@ const Stack = createStackNavigator();
 import React from "react";
 import { useSelector } from "react-redux";
 import ForgetPassword from "../../screens/resetPasswordScreen";
+import NewPassword from "../../screens/newPassword";
 export default function AuthStack({ navigation }) {
 const [isLoading, setIsLoading] = React.useState(true)
 
@@ -40,7 +41,12 @@ console.log(userInfos);
         component={ForgetPassword}
         options={{ headerShown: false }}
         navigation={navigation}
-
+      />
+      <Stack.Screen
+        name="newPassword"
+        component={NewPassword}
+        options={{ headerShown: false }}
+        navigation={navigation}
       />
     </Stack.Navigator>
   );
