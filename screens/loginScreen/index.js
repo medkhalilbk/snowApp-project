@@ -101,6 +101,7 @@ function LoginScreen() {
               }}
               onPress={() => {
                 loginRequest({ email, password }).then((res) => {
+                  setErrorCatched(false);
                   dispatch(loginAction(res.data.user));
                   dispatch(updateTokenAction(res.data.tokens));
 
