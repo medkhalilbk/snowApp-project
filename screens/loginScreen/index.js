@@ -36,17 +36,41 @@ function LoginScreen({navigation}) {
             resizeMode="contain"
           />
           <TextInput
-            style={[styles.emailInput, { borderColor: errorCatched ? 'red' : "#AFAFAF" }]}
+            style={[
+              styles.emailInput,
+              {
+                borderColor: errorCatched
+                  ? "rgba(248, 109, 109, 0.8)"
+                  : "transparent",
+              },
+            ]}
             onChangeText={(v) => setEmail(v)}
             placeholder="Email"
-            placeholderTextColor={errorCatched ? 'rgba(248, 109, 109, 0.71)' : "rgba(117, 119, 132, 0.5)"}
+            placeholderTextColor={
+              errorCatched
+                ? "rgba(248, 109, 109, 0.8)"
+                : "rgba(250, 250, 250, 0.4)"
+            }
           />
-          <View style={[styles.containerOfPasswordInput, { borderColor: errorCatched ? 'red' : "#AFAFAF" }]}>
+          <View
+            style={[
+              styles.containerOfPasswordInput,
+              {
+                borderColor: errorCatched
+                  ? "rgba(248, 109, 109, 0.8)"
+                  : "transparent",
+              },
+            ]}
+          >
             <TextInput
               secureTextEntry={!showPassword}
-              style={{ width: 140 }}
+              style={{ width: 140, color: "white" }}
               placeholder="Mot de passe"
-              placeholderTextColor={errorCatched ? 'rgba(248, 109, 109, 0.71)' : "rgba(117, 119, 132, 0.5)"}
+              placeholderTextColor={
+                errorCatched
+                  ? "rgba(248, 109, 109, 0.5)"
+                  : "rgba(250, 250, 250, 0.4)"
+              }
               onChangeText={(v) => setPassword(v)}
             />
             <MaterialCommunityIcons
@@ -93,16 +117,19 @@ function LoginScreen({navigation}) {
             <Pressable
               style={styles.buttonSeConnecter}
               onPress={() => {
-                loginRequest({ email, password }).then((res) => {
-                  setErrorCatched(false);
-                  dispatch(loginAction(res.data.user));
-                  dispatch(updateTokenAction(res.data.tokens));
-
-                })
+                loginRequest({ email, password })
+                  .then((res) => {
+                    setErrorCatched(false);
+                    dispatch(loginAction(res.data.user));
+                    dispatch(updateTokenAction(res.data.tokens));
+                  })
                   .catch((err) => {
-                    setErrorCatched(true)
-                    if (err.toString() == "Error: Error: cannot save in localstorage") {
-                      setErrorMessage("Error: cannot save in localstorage")
+                    setErrorCatched(true);
+                    if (
+                      err.toString() ==
+                      "Error: Error: cannot save in localstorage"
+                    ) {
+                      setErrorMessage("Error: cannot save in localstorage");
                     }
                   });
               }}
@@ -118,17 +145,17 @@ function LoginScreen({navigation}) {
                 Se connecter
               </Text>
             </Pressable>
-            <Pressable onPress={() => navigation.navigate('ForgetPassword')}>
-              <Text
-                style={{ color: mainColor, fontSize: 12, fontWeight: 400 }}
-              >
+            <Pressable onPress={() => navigation.navigate("ForgetPassword")}>
+              <Text style={{ color: mainColor, fontSize: 12, fontWeight: 400 }}>
                 Mot de passe oublié?
               </Text>
             </Pressable>
           </View>
           {errorCatched && (
-            <Text style={{ color: "rgba(248, 109, 109, 1)", marginTop: 14, }}>
-              {errorMessage ? errorMessage : "Il y a une erreur dans le mot de passe ou l'email."}
+            <Text style={{ color: "rgba(248, 109, 109, 1)", marginTop: 14 }}>
+              {errorMessage
+                ? errorMessage
+                : "Il y a une erreur dans le mot de passe ou l'email."}
             </Text>
           )}
         </ScrollView>

@@ -1,8 +1,8 @@
 import { StyleSheet } from "react-native";
 import { Dimensions } from "react-native";
-export const mainColor = "#2D57A3";
+export const mainColor = "#1DA1F2";
 const secondaryColor = "#0092D0";
-const blackColor = "#212121";
+const blackColor = "#32363F";
 export const whiteColor = "#F5F5F5";
 const redColor = "#A13311";
 const greenColor = "#008A63";
@@ -28,7 +28,7 @@ export const styles = StyleSheet.create({
   },
   containerLogin: {
     flex: 1,
-    backgroundColor: whiteColor,
+    backgroundColor: blackColor,
   },
   imageLogin: {
     width: 250,
@@ -39,11 +39,12 @@ export const styles = StyleSheet.create({
   emailInput: {
     height: 40,
     width: 280,
-    marginBottom: "8%",
+    marginBottom: "3%",
     borderWidth: 1,
     padding: 10,
-    borderRadius: 16,
-    borderColor: "#AFAFAF",
+    borderRadius: 5,
+    color: colors.white,
+    backgroundColor: "#2B2E36",
   },
   containerOfPasswordInput: {
     flexDirection: "row",
@@ -51,20 +52,22 @@ export const styles = StyleSheet.create({
     width: 280,
     height: 40,
     borderWidth: 1,
-    borderRadius: 16,
-    borderColor: "#AFAFAF",
+    borderRadius: 5,
+    borderColor: "transparent",
+    backgroundColor: "#2B2E36",
     paddingLeft: 10,
   },
   textInForgetPassword: {
-    color: "#2D57A3",
+    color: colors.main,
     fontSize: 20,
     fontWeight: "400",
     fontFamily: "Poppins",
-    textAlign: "center"
+    textAlign: "center",
   },
   subtitleInForgetPassword: {
     textAlign: "center",
-    color: "#333333",
+    color: colors.white,
+    marginBottom: "3%",
     fontSize: 12,
     margin: 12,
   },
@@ -83,31 +86,32 @@ export const styles = StyleSheet.create({
     color: "white",
   },
   textInResetPassword: {
-    color: "#2D57A3",
+    color: colors.main,
     fontSize: 20,
     fontWeight: "400",
     fontFamily: "Poppins",
     alignSelf: "flex-start",
-    margin: 13
+    margin: 13,
   },
   listItem: {
     marginLeft: 14,
-    color: "#757575"
-
+    color: "#757575",
+  },
+  activeItem: {
+    marginLeft: 14,
+    color: colors.white,
   },
   containerOfList: {
     alignSelf: "flex-start",
     marginLeft: 14,
-    marginBottom:14,
-
+    marginBottom: 14,
   },
   listOfItems: {
     fontSize: 14,
     fontWeight: "400",
-    color: "#757575"
-
+    color: colors.white,
   },
-  ResetPassword:{
-    flexDirection:"row",
-  }
+  ResetPassword: {
+    flexDirection: "row",
+  },
 });
