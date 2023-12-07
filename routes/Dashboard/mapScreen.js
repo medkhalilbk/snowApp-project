@@ -1,11 +1,14 @@
 import React from "react";
 import MapView from "react-native-maps";
-import { StyleSheet, View } from "react-native";
+import { Dimensions, StyleSheet, View } from "react-native";
 import * as Location from "expo-location";
 import { Marker } from "react-native-maps";
 import MapViewDirections from "react-native-maps-directions";
 import { useState } from "react";
+var { width, height } = Dimensions.get('screen')
+
 export default function MapScreen() {
+
   const [location, setLocation] = React.useState(null);
   const [errorMsg, setErrorMsg] = React.useState(null);
 
@@ -49,17 +52,17 @@ export default function MapScreen() {
       {location && (
         <MapView
           showsUserLocation
-          showsBuildings
-          showsIndoors
-          showsCompass
-          showsScale
-          showsTraffic
-          showsMyLocationButton
+          
+          zoomEnabled = {true}
+          
           style={styles.map}
           initialRegion={{
+            latitudeDelta: 0.0922, // Example delta values for zoom level
+            longitudeDelta: 0.0421,
             latitude: location.coords.latitude,
             longitude: location.coords.longitude,
           }}
+          // onPoiClick={(e)=>console.log(e)}
         >
           <MapViewDirections
             origin={origin}
@@ -88,7 +91,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   map: {
-    width: "100%",
-    height: "100%",
+    width: width ,
+    height: height,
   },
 });

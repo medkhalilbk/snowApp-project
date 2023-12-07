@@ -18,9 +18,14 @@
       "supportsTablet": true
     },
     "android": {
+       "config": {
+        "googleMaps": {
+          "apiKey": "AIzaSyArv0zDFWad2xEFtI9p4nVc-fhocwEHioY"
+        },
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
+      }
       },
       "package": "com.anonymous.snowAppp"
     },
