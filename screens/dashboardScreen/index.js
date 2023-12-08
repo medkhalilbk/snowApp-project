@@ -7,6 +7,7 @@ import MapScreen from "../../routes/Dashboard/mapScreen";
 import OperationScreen from "./OperationScreen";
 import { Feather } from '@expo/vector-icons';
 import { Ionicons } from '@expo/vector-icons';
+import { whiteColor } from "../../styles";
 
 function SettingsScreen() {
   return (
@@ -33,26 +34,46 @@ export default function DashboardScreen() {
       <Tab.Screen name="Settings" component={OperationScreen}
         options={{
           headerStyle: {
-            backgroundColor: '#32363F'
+            backgroundColor: '#32363F',
+            
           },
           title: "",
           headerLeft: () => (
             <View style={{
-              marginLeft:12,
-              marginTop:6
+              marginLeft: 12,
+              marginTop: 6
             }}>
               <Feather name="settings" size={28} color="white" />
             </View>
           ),
           headerRight: () => (
             <View style={{
-              marginLeft:12,
-              marginTop:6,
-              display:"flex",
-              flexDirection:"row"
+              marginRight: 12,
+              marginTop: 6,
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center"
             }}>
-              <Ionicons name="notifications-outline" size={28} color="white" />
-              <View><Text>2</Text></View>
+             
+              <Ionicons name="notifications-outline" size={30} color="white" />
+              <View style={{
+                backgroundColor: "#FF6624",
+                width: 18,
+                height:18,
+                borderRadius:22,
+                alignItems:"center",
+                position:"absolute",
+                left:13
+              }}>
+                <Text style={{color:whiteColor}}>2</Text>
+              </View>
+              <View
+                style={{
+
+                }}
+              >
+
+              </View>
             </View>
           ),
         }}

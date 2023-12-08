@@ -1,9 +1,12 @@
 import React from 'react'
-import { Text } from 'react-native'
+import { Text, View } from 'react-native'
+import ProfileIndicator from '../../components/profileIndicator'
 
 function OperationScreen() {
   return (
-    <Text>test test </Text>
+    <View style={{backgroundColor:"#32363F",flex:1,alignItems:'center'}}>
+    <ProfileIndicator/>
+    </View>
   )
 }
 
