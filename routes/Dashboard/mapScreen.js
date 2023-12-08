@@ -5,7 +5,7 @@ import * as Location from "expo-location";
 import { Marker } from "react-native-maps";
 import MapViewDirections from "react-native-maps-directions";
 import { useState } from "react";
-var { width, height } = Dimensions.get('screen')
+const { width, height } = Dimensions.get('screen')
 
 export default function MapScreen() {
 

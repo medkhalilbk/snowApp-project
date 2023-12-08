@@ -19,12 +19,24 @@ const colors = {
 };
 
 export const styles = StyleSheet.create({
+  chartText: {
+    color: "rgba(29, 161, 242, 1)",
+    fontWeight:"600"
+  },
+
   splashContainer: {
     backgroundColor: colors.main,
+  },
+  chartContainer: {
+    width: width,
   },
   loginFormContainer: {
     minWidth: width,
     alignItems: "center",
+  },
+  defaultContainer: {
+    flex: 1,
+    backgroundColor: blackColor,
   },
   containerLogin: {
     flex: 1,
