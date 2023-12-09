@@ -64,7 +64,7 @@ export default function DashboardScreen() {
         options={{
           tabBarStyle: { backgroundColor: "#32363F" },
           headerStyle: {
-            backgroundColor: "#32363F",
+            backgroundColor: '#32363F'
           },
           tabBarIcon: ({ color, size }) => (
             <FontAwesome name="map-marker" size={size} color={color} />
@@ -73,27 +73,40 @@ export default function DashboardScreen() {
           headerTitle: "",
 
           headerLeft: () => (
-            <View
-              style={{
-                marginLeft: 12,
-                marginTop: 6,
-              }}
-            >
+            <View style={{
+              marginLeft:12,
+              marginTop:6
+            }}>
               <Feather name="settings" size={28} color="white" />
             </View>
           ),
           headerRight: () => (
-            <View
-              style={{
-                marginLeft: 12,
-                marginTop: 6,
-                display: "flex",
-                flexDirection: "row",
-              }}
-            >
-              <Ionicons name="notifications-outline" size={28} color="white" />
-              <View>
-                <Text>2</Text>
+            <View style={{
+              marginRight: 12,
+              marginTop: 6,
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center"
+            }}>
+             
+              <Ionicons name="notifications-outline" size={30} color="white" />
+              <View style={{
+                backgroundColor: "#FF6624",
+                width: 18,
+                height:18,
+                borderRadius:22,
+                alignItems:"center",
+                position:"absolute",
+                left:13
+              }}>
+                <Text style={{color:whiteColor}}>2</Text>
+              </View>
+              <View
+                style={{
+
+                }}
+              >
+
               </View>
             </View>
           ),
