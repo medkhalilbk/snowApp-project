@@ -11,7 +11,7 @@ function App() {
     <Provider store={store}>
       <NavigationContainer>
         <AuthStack />
-   {/*      <DashboardStack/> */}
+       {/*  <DashboardStack/> */}
       </NavigationContainer>
     </Provider>
   );
