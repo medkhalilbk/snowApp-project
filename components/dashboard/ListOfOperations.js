@@ -2,7 +2,7 @@ import React from 'react'
 import { Dimensions, SafeAreaView, ScrollView, TextInput, TouchableOpacity, View } from 'react-native'
 import CardOfOperation from './cardOfOperation'
 import { styles } from '../../styles'
-import { FontAwesome,AntDesign } from '@expo/vector-icons';
+import { FontAwesome, AntDesign } from '@expo/vector-icons';
 
 function ListOfOperations() {
     const { width, height } = Dimensions.get("window");
@@ -77,4 +77,4 @@ function ListOfOperations() {
     )
 }
 
-export default ListOfOperations
+export default ListOfOperations;

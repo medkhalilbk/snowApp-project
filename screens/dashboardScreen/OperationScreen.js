@@ -11,7 +11,7 @@ function OperationScreen() {
     <View style={styles.defaultContainer}>
       <ProfileIndicator />
       <DailyOperations />
-      <ListOfOperations/>
+      <ListOfOperations />
     </View>
   );
 }
