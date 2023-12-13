@@ -5,9 +5,13 @@ import * as Location from "expo-location";
 import { Marker } from "react-native-maps";
 import MapViewDirections from "react-native-maps-directions";
 import { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { updateLocation } from "../../redux/actions/gps"; 
 const { width, height } = Dimensions.get('screen')
 
 export default function MapScreen() {
+  const locationRedux = useSelector(state => state.gps)
+  const dispatch = useDispatch()
 
   const [location, setLocation] = React.useState(null);
   const [errorMsg, setErrorMsg] = React.useState(null);
@@ -24,22 +28,27 @@ export default function MapScreen() {
 
   React.useEffect(() => {
     (async () => {
-      let { status } = await Location.requestForegroundPermissionsAsync();
-      if (status !== "granted") {
-        alert("Permission to access location was denied");
-        return;
-      }
+      
 
       let location = await Location.getCurrentPositionAsync({});
-      console.log(location);
+       
+     
       setLocation(location);
+ 
       setOrigin({
         latitude: location.coords.latitude,
         longitude: location.coords.longitude,
       });
     })();
-  }, [location]);
-
+  });
+  React.useEffect(() => {
+    Location.getCurrentPositionAsync({}).then((data) => {
+         setInterval(() => {
+      dispatch(updateLocation(data));
+    }, 5000);
+   });
+ 
+  },[])
   let text = "Waiting..";
   if (errorMsg) {
     text = errorMsg;

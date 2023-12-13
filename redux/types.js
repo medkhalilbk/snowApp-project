@@ -1,2 +1,3 @@
 export const LOGIN_ACTION = "LOGIN_ACTION";
 export const UPDATE_TOKEN = "UPDATE_TOKEN";
+export const UPDATE_LOCATION = "LOGIN_ACTION"; 

@@ -11,6 +11,7 @@
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
+  
     "assetBundlePatterns": [
       "**/*"
     ],
@@ -18,14 +19,14 @@
       "supportsTablet": true
     },
     "android": {
-       "config": {
+      "config": {
         "googleMaps": {
           "apiKey": "AIzaSyArv0zDFWad2xEFtI9p4nVc-fhocwEHioY"
         },
-      "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-icon.png",
-        "backgroundColor": "#ffffff"
-      }
+        "adaptiveIcon": {
+          "foregroundImage": "./assets/adaptive-icon.png",
+          "backgroundColor": "#ffffff"
+        }
       },
       "package": "com.anonymous.snowAppp"
     },
