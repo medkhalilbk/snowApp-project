@@ -1,22 +1,22 @@
 import * as React from "react";
-import { NavigationContainer } from "@react-navigation/native"; 
-import AuthStack from "./routes/Auth"; 
+import { NavigationContainer } from "@react-navigation/native";  
 import configureStore from "./redux/store";
-import { Provider } from "react-redux";
 import * as Location from "expo-location";
 import DashboardStack from "./routes/Dashboard";
-
+import { Provider } from "react-redux";
 function App() {
-  const store = configureStore();
+  const store = configureStore(); 
   React.useEffect(() => {
     (async () => {
       let { status } = await Location.requestForegroundPermissionsAsync();
+      
       if (status !== "granted") {
         alert("Permission to access location was denied");
         return;
       } 
     })();
   }, []);
+
   return (
     <Provider store={store}>
       <NavigationContainer>

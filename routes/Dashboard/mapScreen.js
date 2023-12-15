@@ -9,8 +9,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { updateLocation } from "../../redux/actions/gps"; 
 const { width, height } = Dimensions.get('screen')
 
-export default function MapScreen() {
-  const locationRedux = useSelector(state => state.gps)
+export default function MapScreen() { 
   const dispatch = useDispatch()
 
   const [location, setLocation] = React.useState(null);
@@ -41,14 +40,7 @@ export default function MapScreen() {
       });
     })();
   });
-  React.useEffect(() => {
-    Location.getCurrentPositionAsync({}).then((data) => {
-         setInterval(() => {
-      dispatch(updateLocation(data));
-    }, 5000);
-   });
- 
-  },[])
+
   let text = "Waiting..";
   if (errorMsg) {
     text = errorMsg;
