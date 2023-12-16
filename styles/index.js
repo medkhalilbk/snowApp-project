@@ -126,4 +126,19 @@ export const styles = StyleSheet.create({
   ResetPassword: {
     flexDirection: "row",
   },
+  checkBoxContainer:{
+    flexDirection: "row",
+    marginTop: 12,
+    alignItems: "center",
+    width: 250,
+    marginBottom: "7%",
+    marginTop: "4%",
+  },
+  connectContiner:{
+    flexDirection: "row",
+    marginTop: 12,
+    alignItems: "center",
+    justifyContent: "space-between",
+    width: 250,
+  }
 });

@@ -10,19 +10,35 @@ import { Keyboard } from 'react-native';
 import { loginRequest } from '../../axios/auth';
 import { useDispatch, useSelector } from 'react-redux';
 import { loginAction, updateTokenAction } from '../../redux/actions/user';
-function LoginScreen({navigation}) {
+import * as SecureStore from 'expo-secure-store';
+
+function LoginScreen({ navigation }) {
   const [password, setPassword] = useState("");
   const [email, setEmail] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [isChecked, setChecked] = useState(false);
   const [errorCatched, setErrorCatched] = useState(false);
   const [errorMessage, setErrorMessage] = useState(null);
+  const dispatch = useDispatch()
+  const user = useSelector(state => state.user)
+  React.useEffect(() => { }, [errorMessage, errorCatched]);
   const toggleShowPassword = () => {
     setShowPassword(!showPassword);
   };
-  const dispatch = useDispatch()
-  const user = useSelector(state => state.user)
-      React.useEffect(() => {}, [errorMessage,errorCatched]);
+  async function SaveInformation(res) {
+    if (isChecked) {
+      // console.log(res);
+      const jsonString = JSON.stringify(res);
+      await SecureStore.setItemAsync("user", jsonString);
+      // let user = await SecureStore.getItemAsync("user");
+      // let userObject = JSON.parse(user); 
+      // console.log(userObject.email)
+    } else {
+// TODO: we should only save user in redux if he didnt check remember me  
+    }
+  }
+
+
   return (
     <KeyboardAvoidingView
       behavior={"height"}
@@ -39,11 +55,7 @@ function LoginScreen({navigation}) {
           <TextInput
             style={[
               styles.emailInput,
-              {
-                borderColor: errorCatched
-                  ? "rgba(248, 109, 109, 0.8)"
-                  : "transparent",
-              },
+              { borderColor: errorCatched ? "rgba(248, 109, 109, 0.8)" : "transparent", },
             ]}
             onChangeText={(v) => setEmail(v)}
             placeholder="Email"
@@ -83,14 +95,7 @@ function LoginScreen({navigation}) {
             />
           </View>
           <View
-            style={{
-              flexDirection: "row",
-              marginTop: 12,
-              alignItems: "center",
-              width: 250,
-              marginBottom: "7%",
-              marginTop: "4%",
-            }}
+            style={styles.checkBoxContainer}
           >
             <Checkbox
               style={{
@@ -106,29 +111,21 @@ function LoginScreen({navigation}) {
               Gardez-moi connecté
             </Text>
           </View>
-          <View
-            style={{
-              flexDirection: "row",
-              marginTop: 12,
-              alignItems: "center",
-              justifyContent: "space-between",
-              width: 250,
-            }}
-          >
+          <View style={styles.connectContiner} >
             <Pressable
               style={styles.buttonSeConnecter}
               onPress={() => {
                 loginRequest({ email: email, password: password }).then((res) => {
-                  // check if error exists  
+                  SaveInformation(res.user);
+                  dispatch(loginAction(res.user))
                   navigation.navigate("Dashboard");
-                }).catch((err) => {  
-                  setErrorCatched(true); 
-                  console.log(err.response.status);
-                  err.response.status != 403 ? setErrorMessage(err.message) : setErrorMessage(err.response.message)
-                  
+                }).catch((err) => {
+                  setErrorCatched(true);
+                  setErrorMessage(err.message);
                 })
-              }} 
-              >
+              }
+              }
+            >
               <Text
                 style={{
                   fontSize: 13,

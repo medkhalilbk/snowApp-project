@@ -6,10 +6,10 @@ import { Marker } from "react-native-maps";
 import MapViewDirections from "react-native-maps-directions";
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { updateLocation } from "../../redux/actions/gps"; 
+import { updateLocation } from "../../redux/actions/gps";
 const { width, height } = Dimensions.get('screen')
 
-export default function MapScreen() { 
+export default function MapScreen() {
   const dispatch = useDispatch()
 
   const [location, setLocation] = React.useState(null);
@@ -27,13 +27,8 @@ export default function MapScreen() {
 
   React.useEffect(() => {
     (async () => {
-      
-
       let location = await Location.getCurrentPositionAsync({});
-       
-     
       setLocation(location);
- 
       setOrigin({
         latitude: location.coords.latitude,
         longitude: location.coords.longitude,
@@ -47,7 +42,6 @@ export default function MapScreen() {
   } else if (location) {
     text = JSON.stringify(location);
   }
-
   return (
     <View style={styles.container}>
       {location && (
@@ -64,7 +58,6 @@ export default function MapScreen() {
             longitude: location.coords.longitude,
           }}
           mapType="satellite"
-        // onPoiClick={(e)=>console.log(e)}
         >
           <MapViewDirections
             origin={origin}
