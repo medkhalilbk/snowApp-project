@@ -1,18 +1,19 @@
 // login function
-import { baseUrl } from "..";
 import axios from "axios";
-import { storeData } from "../../helpers/localStoarge";
+import { baseUrl } from ".."; 
+
 export async function loginRequest({ email, password }) {
   try {
-    const res = await axios.post(baseUrl + "/api/login", {
-      email: email,
-      password: password,
-    });
-    console.log(res)
-    /* const tokenSaved = await storeData("token", res.data.tokens.access.token) */
-    return res;
-  } catch (error) {
-    throw new Error(error)
-
+    const response = await axios.post(`${baseUrl}/api/login`, {
+      email,
+      password,
+    }); 
+    
+    if (response.data.user.id_cms_privileges !== 4) {
+      throw new Error("Le rôle de votre compte n'est pas chauffeur !");
+    }
+    return response.data;
+  } catch (error) { 
+     throw error;
   }
 }

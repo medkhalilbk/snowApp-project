@@ -19,35 +19,33 @@ console.log(userInfos);
     }, 3000);
   }, [])
    
-  return (
-    <Stack.Navigator>
-      {isLoading && (
+  return ( 
+      <Stack.Navigator>
+        {isLoading && (
+          <Stack.Screen
+            name="splashScreen"
+            component={SplashScreen}
+            options={{ headerShown: false }}
+          />
+        )}
         <Stack.Screen
-          name="splashScreen"
-          component={SplashScreen}
+          name="LoginScreen"
+          component={LoginScreen}
           options={{ headerShown: false }}
-          
+          navigation={navigation}
         />
-      )}
-      <Stack.Screen
-        name="LoginScreen"
-        component={LoginScreen}
-        options={{ headerShown: false }}
-        navigation={navigation}
-
-      />
-       <Stack.Screen
-        name="ForgetPassword"
-        component={ForgetPassword}
-        options={{ headerShown: false }}
-        navigation={navigation}
-      />
-      <Stack.Screen
-        name="newPassword"
-        component={NewPassword}
-        options={{ headerShown: false }}
-        navigation={navigation}
-      />
-    </Stack.Navigator>
+        <Stack.Screen
+          name="ForgetPassword"
+          component={ForgetPassword}
+          options={{ headerShown: false }}
+          navigation={navigation}
+        />
+        <Stack.Screen
+          name="newPassword"
+          component={NewPassword}
+          options={{ headerShown: false }}
+          navigation={navigation}
+        />
+      </Stack.Navigator> 
   );
 }

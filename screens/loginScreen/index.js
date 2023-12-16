@@ -22,6 +22,7 @@ function LoginScreen({navigation}) {
   };
   const dispatch = useDispatch()
   const user = useSelector(state => state.user)
+      React.useEffect(() => {}, [errorMessage,errorCatched]);
   return (
     <KeyboardAvoidingView
       behavior={"height"}
@@ -117,23 +118,17 @@ function LoginScreen({navigation}) {
             <Pressable
               style={styles.buttonSeConnecter}
               onPress={() => {
-                loginRequest({ email, password })
-                  .then((res) => {
-                    setErrorCatched(false);
-                    dispatch(loginAction(res.data.user));
-                    dispatch(updateTokenAction(res.data.tokens));
-                  })
-                  .catch((err) => {
-                    setErrorCatched(true);
-                    if (
-                      err.toString() ==
-                      "Error: Error: cannot save in localstorage"
-                    ) {
-                      setErrorMessage("Error: cannot save in localstorage");
-                    }
-                  });
-              }}
-            >
+                loginRequest({ email: email, password: password }).then((res) => {
+                  // check if error exists  
+                  navigation.navigate("Dashboard");
+                }).catch((err) => {  
+                  setErrorCatched(true); 
+                  console.log(err.response.status);
+                  err.response.status != 403 ? setErrorMessage(err.message) : setErrorMessage(err.response.message)
+                  
+                })
+              }} 
+              >
               <Text
                 style={{
                   fontSize: 13,
@@ -153,9 +148,7 @@ function LoginScreen({navigation}) {
           </View>
           {errorCatched && (
             <Text style={{ color: "rgba(248, 109, 109, 1)", marginTop: 14 }}>
-              {errorMessage
-                ? errorMessage
-                : "Il y a une erreur dans le mot de passe ou l'email."}
+              {errorMessage}
             </Text>
           )}
         </ScrollView>
