@@ -121,7 +121,7 @@ function LoginScreen({ navigation }) {
                   navigation.navigate("Dashboard");
                 }).catch((err) => {
                   setErrorCatched(true);
-                  setErrorMessage(err.message);
+                  setErrorMessage(JSON.stringify(err));
                 })
               }
               }
