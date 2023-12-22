@@ -3,9 +3,16 @@ import { Dimensions, SafeAreaView, ScrollView, TextInput, TouchableOpacity, View
 import CardOfOperation from './cardOfOperation'
 import { styles } from '../../styles'
 import { FontAwesome, AntDesign } from '@expo/vector-icons';
+import { useSelector } from 'react-redux';
+import { removeTags } from '../../helpers';
 
 function ListOfOperations() {
     const { width, height } = Dimensions.get("window");
+    const operationsList = useSelector(state => state.operations.operationsList)
+
+    React.useEffect(() => {
+         
+    }, [])
 
     return (
         <SafeAreaView style={{ flex: 2 }}>
@@ -63,14 +70,20 @@ function ListOfOperations() {
 
             <ScrollView contentContainerStyle={{
                 paddingLeft: 20, gap: 20, paddingRight: 20
-            }}>
-                <CardOfOperation />
-                <CardOfOperation />
-                <CardOfOperation />
-                <CardOfOperation />
-                <CardOfOperation />
-                <CardOfOperation />
-                <CardOfOperation />
+            }}> 
+                {operationsList?.map((op,k) => {
+                return (
+                  <CardOfOperation
+                    id={op.id}
+                    isDone={op.is_done}
+                    key={k}
+                    title={op.title}
+                    start_date={op.start_date + " | " + op.start_hour}
+                    addresse={op.ville + ", " + op.addresse}
+                    description={removeTags(op.description)}
+                  />
+                );
+                })}
 
             </ScrollView>
         </SafeAreaView>
