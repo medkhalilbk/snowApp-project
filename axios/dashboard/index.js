@@ -1,26 +1,13 @@
-import { useSelector } from "react-redux";
-import { baseUrl } from "..";
-import axios from "axios";
-export async function getOperation(id, elemntPerPage, page) {
-    var response = null
-    try {
-        if (id && elemntPerPage && page) {
-            throw new Error({
-                'error': false,
-                "message": "parrsing data to axios error"
-            });
-        } else {
-            if (elemntPerPage && elemntPerPage > 0) {
-                response = await axios.get(`${baseUrl}/api/mobile/operations/${id}?per_page=${elemntPerPage}`);
-
-            } else if (page && page > 1) {
-                response = await axios.get(`${baseUrl}/api/mobile/operations/${id}?page=${page}`);
-            }
-            else {
-                response = await axios.get(`${baseUrl}/api/mobile/operations/${id}`);
-            }
-            return response.data; 
-        }
+ 
+import { baseUrl } from ".."; 
+import axios from "axios"; 
+ 
+export async function getAllOperations({userId,...args}) { 
+    try { 
+        let elemntPerPage = args[0] | 1 ;
+        // hardcoded id
+        const response = await axios.get(`${baseUrl}/api/mobile/operations/${11}?per_page=10`);  
+        return response.data.message.data
     } catch (err) {
         throw err
     }
