@@ -20,13 +20,13 @@ export default function DashboardStack() {
   return (
     <Stack.Navigator>
       <Stack.Screen
-        name="operationDetailScreen"
-        component={OperationDetailScreen}
+        name="dashboard"
+        component={DashboardScreen}
         options={{ headerShown: false }}
       />
       <Stack.Screen
-        name="dashboard"
-        component={DashboardScreen}
+        name="operationDetailScreen"
+        component={OperationDetailScreen}
         options={{ headerShown: false }}
       />
     </Stack.Navigator>

@@ -7,7 +7,7 @@ import { getAllOperations } from '../../axios/dashboard';
 import { updateOperationsAction } from '../../redux/actions/operations';
 import * as Crypto from "expo-crypto";
 
-function ListOfOperations() { 
+function ListOfOperations({navigation}) { 
   const operationsList = useSelector(
     (state) => state.operations.operationsList
     );
@@ -43,6 +43,7 @@ function ListOfOperations() {
   return useMemo(
     () => (
       <CardOfOperation
+        navigation={navigation}
         key={k}
         id={item.id}
         isDone={item.is_done}

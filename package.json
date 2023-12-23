@@ -41,7 +41,8 @@
     "socket.io-client": "^4.7.2",
     "expo-dev-client": "~2.4.12",
     "expo-secure-store": "~12.3.1",
-    "react-native-reanimated": "~3.3.0"
+    "react-native-reanimated": "~3.3.0",
+    "expo-crypto": "~12.4.1"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0"
