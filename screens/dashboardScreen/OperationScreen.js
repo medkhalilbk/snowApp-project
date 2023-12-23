@@ -1,4 +1,4 @@
-import React from "react";
+import React , {useState} from "react";
 import { Text } from "react-native";
 import ProfileIndicator from "../../components/profileIndicator";
 import DailyOperations from "../../components/dashboard/DailyOperations";
@@ -9,17 +9,9 @@ import { getAllOperations } from "../../axios/dashboard";
 import { useDispatch, useSelector } from "react-redux"; 
 import { updateOperationsAction } from "../../redux/actions/operations";
 function OperationScreen({navigation}) {
-  const userId = useSelector(state => state.user.informations.id)
-  const dispatch = useDispatch()
-  React.useEffect(() => { 
-    getAllOperations({userId:userId})
-      .then((res) => {
-       dispatch(updateOperationsAction(res));
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  } , [])
+ 
+ 
+   
   return (
     <View style={styles.defaultContainer}>
       <ProfileIndicator />
