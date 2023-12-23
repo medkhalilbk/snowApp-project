@@ -1,17 +1,48 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { Dimensions, SafeAreaView, ScrollView, TextInput, TouchableOpacity, View } from 'react-native'
 import CardOfOperation from './cardOfOperation'
 import { styles } from '../../styles'
 import { FontAwesome, AntDesign } from '@expo/vector-icons';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { removeTags } from '../../helpers';
+import { useRef } from 'react';
+import { getAllOperations } from '../../axios/dashboard';
+import { updateOperationsAction } from '../../redux/actions/operations';
 
 function ListOfOperations() {
     const { width, height } = Dimensions.get("window");
     const operationsList = useSelector(state => state.operations.operationsList)
+    const [List, setList] = useState([...operationsList]); 
+    const userId = useSelector(state => state.user.informations.id)
+    const dispatch = useDispatch()
+    const lastPage = useSelector(state => state.operations.lastPage)
+    const scrollViewRef = useRef(null);
+    const [page, setPage] = useState(1);
+    const handleScroll = (event) => {
+      const contentHeight = event.nativeEvent.contentSize.height;
+      const scrollViewHeight = event.nativeEvent.layoutMeasurement.height;
+      const scrollOffset = event.nativeEvent.contentOffset.y;
+      const isEnd = scrollOffset >= contentHeight - scrollViewHeight;
+     if(isEnd){
+        if(page<=lastPage){
+        setPage(page+1)
+        console.log("page from screen is "+ page)
+        getAllOperations({userId:userId},page)
+        .then((res) => {
+            // console.log(res.data)
+             setList([...List, ...res.data])
+            // console.log("current_page"+ res.current_page)
+              console.log("this should be more than the last "+List.length)
+             dispatch(updateOperationsAction(List));
+        
+        })
 
+    }
+     }
+    };
     React.useEffect(() => {
-         
+        setList([...operationsList]);
+
     }, [])
 
     return (
@@ -68,7 +99,10 @@ function ListOfOperations() {
                 </TouchableOpacity>
             </View>
 
-            <ScrollView contentContainerStyle={{
+            <ScrollView
+            ref={scrollViewRef}
+            onScroll={handleScroll}
+            contentContainerStyle={{
                 paddingLeft: 20, gap: 20, paddingRight: 20
             }}> 
                 {operationsList?.map((op,k) => {
@@ -80,7 +114,7 @@ function ListOfOperations() {
                     title={op.title}
                     start_date={op.start_date + " | " + op.start_hour}
                     addresse={op.ville + ", " + op.addresse}
-                    description={removeTags(op.description)}
+                    // description={removeTags(op.description)}
                   />
                 );
                 })}
