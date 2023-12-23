@@ -10,8 +10,13 @@ const initialState = {
 const operationReducer = (state = initialState, action) => {
   
   switch (action.type) {
-    case UPDATE_OPERATIONS:
-      return { ...state, operationsList: action.payload };
+    case UPDATE_OPERATIONS: 
+      const mergedArray = [];
+      console.log("from redux //" + state.operationsList.length);
+      return {
+        ...state,
+        operationsList: [...state.operationsList, ...action.payload],
+      };
     case UPDATE_OPERATIONS_TIME:
       return { ...state, estimatedHours: action.payload };
     case UPDATE_LASTPAGE_OF_OPERATION:

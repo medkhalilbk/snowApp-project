@@ -23,6 +23,8 @@ export default function CardOfOperation({
   return (
     <View
       style={{
+        marginTop: 15,
+        marginHorizontal:10,
         paddingTop: 8,
         paddingLeft: 12,
         paddingRight: 12,
