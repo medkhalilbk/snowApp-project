@@ -1,7 +1,7 @@
 import { LOGIN_ACTION, UPDATE_TOKEN } from "../types";
 
 const initialState = {
-    informations: {id:1}, 
+    informations: {id:null}, 
     tokens:null
 };
 

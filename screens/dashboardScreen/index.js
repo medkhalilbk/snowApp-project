@@ -8,6 +8,7 @@ import OperationScreen from "./OperationScreen";
 import { Feather } from '@expo/vector-icons'; 
 import { AntDesign } from "@expo/vector-icons";
 import RightNotification from "../../components/header/rightNotification";
+import OperationDetailScreen from "./OperationDetailScreen";
 
  
 
@@ -17,7 +18,7 @@ export default function DashboardScreen() {
   return (
     <Tab.Navigator>
       <Tab.Screen
-        name="Carte"
+        name="operationScreen"
         component={OperationScreen}
         options={{
           tabBarIcon: ({ color, size }) => (
@@ -44,7 +45,7 @@ export default function DashboardScreen() {
         }}
       />
       <Tab.Screen
-        name="Settings"
+        name="mapScreen"
         component={MapScreen}
         options={{
           tabBarStyle: { backgroundColor: "#32363F" },
@@ -70,6 +71,7 @@ export default function DashboardScreen() {
           headerRight: () => <RightNotification />,
         }}
       />
+       
     </Tab.Navigator>
   );
 }

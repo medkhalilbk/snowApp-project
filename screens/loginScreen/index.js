@@ -26,16 +26,14 @@ function LoginScreen({ navigation }) {
     setShowPassword(!showPassword);
   };
   async function SaveInformation(res) {
+  try {
+      await SecureStore.setItemAsync("user", JSON.stringify(res));
     if (isChecked) {
-      // console.log(res);
-      const jsonString = JSON.stringify(res);
-      await SecureStore.setItemAsync("user", jsonString);
-      // let user = await SecureStore.getItemAsync("user");
-      // let userObject = JSON.parse(user); 
-      // console.log(userObject.email)
-    } else {
-// TODO: we should only save user in redux if he didnt check remember me  
-    }
+        await SecureStore.setItemAsync("rememberMe", "true"); 
+      } 
+  } catch (error) {
+    console.warn(error)
+  }
   }
 
 

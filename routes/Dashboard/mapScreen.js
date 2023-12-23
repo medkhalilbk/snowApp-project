@@ -1,97 +1,159 @@
-import React from "react";
-import MapView from "react-native-maps";
-import { Dimensions, Image, StyleSheet, View } from "react-native";
-import * as Location from "expo-location";
-import { Marker } from "react-native-maps";
+import React, { useState, useEffect, useRef } from "react";
+import { Dimensions, Image, StyleSheet, View,Modal,Text,Pressable } from "react-native";
+import MapView, { Marker } from "react-native-maps";
 import MapViewDirections from "react-native-maps-directions";
-import { useState } from "react";
+import * as Location from "expo-location";
 import { useDispatch, useSelector } from "react-redux";
 import { updateLocation } from "../../redux/actions/gps";
-const { width, height } = Dimensions.get('screen')
+ 
 
-export default function MapScreen() {
-  const dispatch = useDispatch()
-
-  const [location, setLocation] = React.useState(null);
-  const [errorMsg, setErrorMsg] = React.useState(null);
-
-  const [destination, setDestination] = useState({
-    latitude: 36.7604892213023,
-    longitude: 10.269946896958375,
-  });
-
+const { width, height } = Dimensions.get("screen"); 
+ 
+  
+export default function MapScreen({ route , navigation}) {
+  const [modalVisible, setModalVisible] = useState(false);
+  const [location, setLocation] = useState(null);
+  const [operationDetail, setOperationDetail] = useState({})
   const [origin, setOrigin] = useState({
     latitude: 6.9271,
     longitude: 79.8612,
   });
+  const [errorMsg, setErrorMsg] = useState(null);
+  const mapRef = useRef(null);
+  const dispatch = useDispatch();
+  const operationsList = useSelector(
+    (state) => state.operations.operationsList
+  );
 
-  React.useEffect(() => {
-    (async () => {
-      let location = await Location.getCurrentPositionAsync({});
-      setLocation(location);
-      setOrigin({
-        latitude: location.coords.latitude,
-        longitude: location.coords.longitude,
-      });
-    })();
-  });
+    
+  useEffect(() => {
+    const getLocation = async () => {
+      try {
+        let newLocation;
+        if (route.params?.operationsCords) {
+          newLocation = route.params?.operationsCords;
+        } else {
+          const { coords } = await Location.getCurrentPositionAsync({});
+          newLocation = coords;
+        }
 
-  let text = "Waiting..";
-  if (errorMsg) {
-    text = errorMsg;
-  } else if (location) {
-    text = JSON.stringify(location);
-  }
+        setLocation(newLocation);
+        setOrigin({
+          latitude: newLocation.latitude,
+          longitude: newLocation.longitude,
+        });
+      } catch (error) {
+        setErrorMsg(error.message);
+        console.log(error)
+      }
+    };
+
+    getLocation();
+  }, [route.params]);
+
+  useEffect(() => {
+    if (route.params?.operationsCords) {
+      setOrigin(route.params.operationsCords);
+      setLocation(route.params.operationsCords);
+    }
+  }, [route.params]);
+
+
+    useEffect(() => {
+      if (location) {
+        mapRef.current.setCamera({
+          center: {
+            latitude: location.latitude,
+            longitude: location.longitude,
+            heading: 0,
+            pitch: 0,
+            zoom: 19.1424331665,
+          },
+        });
+      }
+    }, [route.params, location]);
+
   return (
     <View style={styles.container}>
       {location && (
         <MapView
+          onMapReady={() => {
+            mapRef.current.getCamera().then((res) => {
+              console.log(res);
+            });
+          }}
           showsUserLocation
-
+          ref={mapRef}
           zoomEnabled={true}
-
           style={styles.map}
           initialRegion={{
-            latitudeDelta: 0.01, // Example delta values for zoom level
-            longitudeDelta: 0.01,
-            latitude: location.coords.latitude,
-            longitude: location.coords.longitude,
+            latitudeDelta: 0.001,
+            longitudeDelta: 0.001,
+            latitude: location.latitude,
+            longitude: location.longitude,
           }}
           mapType="satellite"
         >
-          <MapViewDirections
-            origin={origin}
-            destination={destination}
-            apikey="AIzaSyArv0zDFWad2xEFtI9p4nVc-fhocwEHioY"
-            strokeWidth={4}
-            strokeColor="#1DA1F2"
-            mode={"DRIVING"}
-          />
-          <Marker coordinate={origin} title="Home" >
-            <Image
-              source={require('../../assets/truck.png')}
-              style={{ width: 44, height: 44 }}
-            />
-          </Marker>
-          <Marker
-            coordinate={destination}
-            title="Iset Rades"
-            onPress={() => {
-              alert("test");
-            }}
-          />
-          <Marker
-            coordinate={{
-              latitude: origin.latitude + 0.001, // Adjust the latitude and longitude for the red dot position
-              longitude: origin.longitude + 0.001,
-            }}
-            pinColor={'red'} // Set the color of the marker pin to red
-            title="Red Dot"
-          />
-
-
+          {operationsList.map((op, k) => (
+            <Marker
+              onPress={() => {
+                setModalVisible(true);
+                setOperationDetail(op);
+              }}
+              key={k}
+              coordinate={{ longitude: op.lng, latitude: op.lat }}
+              title={op.title}
+            >
+              <Image
+                style={{ width: 50, height: 50, justifyContent: "center" }}
+                source={
+                  op.is_done === 1
+                    ? require("../../assets/map_assets/green_pin.png")
+                    : require("../../assets/map_assets/red_pin.png")
+                }
+              />
+            </Marker>
+          ))}
         </MapView>
       )}
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={modalVisible}
+        onRequestClose={() => {
+          Alert.alert("Modal has been closed.");
+          setModalVisible(!modalVisible);
+        }}
+      >
+        <View style={styles.centeredView}>
+          <View style={styles.modalView}>
+            <Text style={styles.modalText}>{operationDetail.title}</Text>
+            <Pressable
+              style={[styles.button, styles.buttonOpen]}
+              onPress={() => {
+                setModalVisible(!modalVisible)
+                navigation.navigate("operationDetailScreen" , {operationDetail})}}
+            >
+              <Text style={styles.textStyle}>Voir Detail</Text>
+            </Pressable>
+            <Pressable
+              style={[styles.button, styles.buttonGps]}
+              onPress={() => {
+                setModalVisible(!modalVisible)
+                // add function to set itineraire 
+              }}
+            >
+              <Text style={styles.textStyle}>Itinéraire</Text>
+            </Pressable>
+            <Pressable
+              style={[styles.button, styles.buttonClose]}
+              onPress={() => setModalVisible(!modalVisible)}
+            >
+              <Text style={styles.textStyle}>Fermer</Text>
+            </Pressable>
+          </View>
+        </View>
+      </Modal>
     </View>
   );
 }
@@ -99,6 +161,49 @@ export default function MapScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+  },
+  centeredView: {
+    flex: 1,
+    justifyContent: "flex-end",
+    alignItems: "center",
+    marginBottom: 50,
+  },
+  modalView: {
+    margin: 20,
+    backgroundColor: "white",
+    borderRadius: 20,
+    padding: 35,
+    alignItems: "center",
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5,
+  },
+  button: {
+    borderRadius: 5,
+    marginTop: 5,
+    padding: 10,
+    elevation: 2,
+  },
+  buttonOpen: {
+    backgroundColor: "#468EE5",
+  },
+  buttonGps: { backgroundColor: "#7FDF4B" },
+  buttonClose: {
+    backgroundColor: "#e23636",
+  },
+  textStyle: {
+    color: "white",
+    fontWeight: "bold",
+    textAlign: "center",
+  },
+  modalText: {
+    marginBottom: 15,
+    textAlign: "center",
   },
   map: {
     width: width,

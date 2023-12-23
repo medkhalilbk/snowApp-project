@@ -6,7 +6,7 @@ import { FontAwesome, AntDesign } from '@expo/vector-icons';
 import { useSelector } from 'react-redux';
 import { removeTags } from '../../helpers';
 
-function ListOfOperations() {
+function ListOfOperations({navigation}) {
     const { width, height } = Dimensions.get("window");
     const operationsList = useSelector(state => state.operations.operationsList)
 
@@ -74,10 +74,12 @@ function ListOfOperations() {
                 {operationsList?.map((op,k) => {
                 return (
                   <CardOfOperation
+                    navigation={navigation}
                     id={op.id}
                     isDone={op.is_done}
                     key={k}
                     title={op.title}
+                    cords={{ latitude: op.lat, longitude: op.lng }}
                     start_date={op.start_date + " | " + op.start_hour}
                     addresse={op.ville + ", " + op.addresse}
                     description={removeTags(op.description)}

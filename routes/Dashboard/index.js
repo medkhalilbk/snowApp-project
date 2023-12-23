@@ -5,6 +5,7 @@ import DashboardScreen from "../../screens/dashboardScreen";
 import { updateLocation } from "../../redux/actions/gps";
 import { useDispatch } from "react-redux";
 import * as Location from "expo-location";
+import OperationDetailScreen from "../../screens/dashboardScreen/OperationDetailScreen";
 
 const Stack = createStackNavigator();
 
@@ -18,6 +19,11 @@ export default function DashboardStack() {
   }, []);
   return (
     <Stack.Navigator>
+      <Stack.Screen
+        name="operationDetailScreen"
+        component={OperationDetailScreen}
+        options={{ headerShown: false }}
+      />
       <Stack.Screen
         name="dashboard"
         component={DashboardScreen}
