@@ -48,6 +48,7 @@ function ListOfOperations({navigation}) {
         id={item.id}
         isDone={item.is_done}
         title={item.title}
+        cords={{ latitude: item.lat, longitude: item.lng }}
         start_date={item.start_date + " | " + item.start_hour}
         addresse={item.ville + ", " + item.addresse}
         /* description={removeTags(op.description)} */

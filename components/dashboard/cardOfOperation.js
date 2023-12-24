@@ -32,6 +32,8 @@ export default function CardOfOperation({
     }} >
       <View
         style={{
+          marginHorizontal:12,
+          marginTop:8,
           paddingTop: 8,
           paddingLeft: 12,
           paddingRight: 12,
