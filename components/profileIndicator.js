@@ -1,11 +1,18 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { Image, Text, View } from 'react-native'
 import { styles, whiteColor } from '../styles'
+import { useSelector } from 'react-redux'
 
 function ProfileIndicator () {
 const userImage='https://images.pexels.com/photos/220453/pexels-photo-220453.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1'
 const fullName='Chauffeur de test 1'
 const email="driver_snowapp@gmail.com"
+const userData=useSelector((state)=>state.user.informations)
+useEffect(() => {
+  console.log("test")
+console.log(userData)
+}, [])
+
 return (
     <View style={{alignItems:'center'}}>
       <Image 

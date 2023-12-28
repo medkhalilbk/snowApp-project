@@ -104,7 +104,7 @@ export default function MapScreen({ route, navigation }) {
             destination={distination}
             apikey={"AIzaSyArv0zDFWad2xEFtI9p4nVc-fhocwEHioY"}
             strokeWidth={4}
-            strokeColor="rgb(15,83,255)" // Set the color to blue
+            strokeColor="rgb(15,83,255)" 
             mode="DRIVING"
           />
           {operationsList.map((op, k) => (
