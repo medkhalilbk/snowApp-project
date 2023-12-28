@@ -1,19 +1,20 @@
 import React, { useState, useEffect, useRef } from "react";
-import { Dimensions, Image, StyleSheet, View,Modal,Text,Pressable } from "react-native";
-import MapView, { Marker } from "react-native-maps";
+import { Dimensions, Image, StyleSheet, View, Modal, Text, Pressable } from "react-native";
+import MapView, { Circle, MapCircle, Marker } from "react-native-maps";
 import MapViewDirections from "react-native-maps-directions";
 import * as Location from "expo-location";
 import { useDispatch, useSelector } from "react-redux";
 import { updateLocation } from "../../redux/actions/gps";
- 
 
-const { width, height } = Dimensions.get("screen"); 
- 
-  
-export default function MapScreen({ route , navigation}) {
+
+const { width, height } = Dimensions.get("screen");
+
+
+export default function MapScreen({ route, navigation }) {
   const [modalVisible, setModalVisible] = useState(false);
   const [location, setLocation] = useState(null);
   const [operationDetail, setOperationDetail] = useState({})
+  const [distination, setDistination] = useState(null);
   const [origin, setOrigin] = useState({
     latitude: 6.9271,
     longitude: 79.8612,
@@ -25,23 +26,23 @@ export default function MapScreen({ route , navigation}) {
     (state) => state.operations.operationsList
   );
 
-    
+
   useEffect(() => {
     const getLocation = async () => {
       try {
         let newLocation;
         if (route.params?.operationsCords) {
           newLocation = route.params?.operationsCords;
-        } else {
-          const { coords } = await Location.getCurrentPositionAsync({});
-          newLocation = coords;
+          setLocation(newLocation);
         }
+        const { coords } = await Location.getCurrentPositionAsync({});
 
-        setLocation(newLocation);
         setOrigin({
-          latitude: newLocation.latitude,
-          longitude: newLocation.longitude,
+          latitude: coords.latitude,
+          longitude: coords.longitude,
         });
+
+
       } catch (error) {
         setErrorMsg(error.message);
         console.log(error)
@@ -52,26 +53,26 @@ export default function MapScreen({ route , navigation}) {
   }, [route.params]);
 
   useEffect(() => {
+
     if (route.params?.operationsCords) {
-      setOrigin(route.params.operationsCords);
       setLocation(route.params.operationsCords);
     }
   }, [route.params]);
 
 
-    useEffect(() => {
-      if (location) {
-        mapRef.current.setCamera({
-          center: {
-            latitude: location.latitude,
-            longitude: location.longitude,
-            heading: 0,
-            pitch: 0,
-            zoom: 19.1424331665,
-          },
-        });
-      }
-    }, [route.params, location]);
+  useEffect(() => {
+    if (location) {
+      mapRef.current.setCamera({
+        center: {
+          latitude: location.latitude,
+          longitude: location.longitude,
+          heading: 0,
+          pitch: 0,
+          zoom: 19.1424331665,
+        },
+      });
+    }
+  }, [route.params, location]);
 
   return (
     <View style={styles.container}>
@@ -82,7 +83,8 @@ export default function MapScreen({ route , navigation}) {
               console.log(res);
             });
           }}
-          showsUserLocation
+          showsUserLocation={false}
+          userLocationPriority="high"
           ref={mapRef}
           zoomEnabled={true}
           style={styles.map}
@@ -94,6 +96,17 @@ export default function MapScreen({ route , navigation}) {
           }}
           mapType="satellite"
         >
+          <Marker
+            coordinate={{ longitude: origin.longitude, latitude: origin.latitude }}
+          />
+          <MapViewDirections
+            origin={origin}
+            destination={distination}
+            apikey={"AIzaSyArv0zDFWad2xEFtI9p4nVc-fhocwEHioY"}
+            strokeWidth={4}
+            strokeColor="rgb(15,83,255)" // Set the color to blue
+            mode="DRIVING"
+          />
           {operationsList.map((op, k) => (
             <Marker
               onPress={() => {
@@ -132,7 +145,8 @@ export default function MapScreen({ route , navigation}) {
               style={[styles.button, styles.buttonOpen]}
               onPress={() => {
                 setModalVisible(!modalVisible)
-                navigation.navigate("operationDetailScreen" , {operationDetail})}}
+                navigation.navigate("operationDetailScreen", { operationDetail })
+              }}
             >
               <Text style={styles.textStyle}>Voir Detail</Text>
             </Pressable>
@@ -140,7 +154,7 @@ export default function MapScreen({ route , navigation}) {
               style={[styles.button, styles.buttonGps]}
               onPress={() => {
                 setModalVisible(!modalVisible)
-                // add function to set itineraire 
+                setDistination({ longitude: operationDetail.lng, latitude: operationDetail.lat })
               }}
             >
               <Text style={styles.textStyle}>Itinéraire</Text>

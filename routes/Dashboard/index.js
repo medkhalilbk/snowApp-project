@@ -2,7 +2,7 @@
 import * as React from "react";
 import { createStackNavigator } from "@react-navigation/stack";
 import DashboardScreen from "../../screens/dashboardScreen";
-import { updateLocation } from "../../redux/actions/gps";
+import { HandShakeSocket, updateLocation } from "../../redux/actions/gps";
 import { useDispatch } from "react-redux";
 import * as Location from "expo-location";
 import OperationDetailScreen from "../../screens/dashboardScreen/OperationDetailScreen";
@@ -12,6 +12,7 @@ const Stack = createStackNavigator();
 export default function DashboardStack() {
   const dispatch = useDispatch()
   React.useEffect(() => {
+    HandShakeSocket(11)
     setInterval(() => {
       Location.getCurrentPositionAsync({}).then((data) => { dispatch(updateLocation(data)); });
     }, 2000);

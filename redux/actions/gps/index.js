@@ -1,5 +1,10 @@
 import { UPDATE_LOCATION } from "../../types";
 import socket from "../../../utils/socket";
+
+export function HandShakeSocket(userId){
+  socket.emit("AUTH",{userId:userId});
+}
+
 export function updateLocation(cords) { 
   let gpsObject = {
       deviceName:352009113798859,
