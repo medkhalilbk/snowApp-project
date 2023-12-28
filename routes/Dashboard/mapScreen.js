@@ -13,6 +13,7 @@ const { width, height } = Dimensions.get("screen");
 export default function MapScreen({ route, navigation }) {
   const [modalVisible, setModalVisible] = useState(false);
   const [location, setLocation] = useState(null);
+  const [locationMarker, setLocationMarker] = useState(null)
   const [operationDetail, setOperationDetail] = useState({})
   const [distination, setDistination] = useState(null);
   const [origin, setOrigin] = useState({
@@ -30,17 +31,18 @@ export default function MapScreen({ route, navigation }) {
   useEffect(() => {
     const getLocation = async () => {
       try {
+        const cordsMarkerLocation  = await Location.getCurrentPositionAsync({});
+        setLocationMarker(cordsMarkerLocation.coords)
+
         let newLocation;
         if (route.params?.operationsCords) {
           newLocation = route.params?.operationsCords;
           setLocation(newLocation);
+        } else {
+          const { coords } = await Location.getCurrentPositionAsync({});
+          newLocation = coords;
+          setLocation(newLocation);
         }
-        const { coords } = await Location.getCurrentPositionAsync({});
-
-        setOrigin({
-          latitude: coords.latitude,
-          longitude: coords.longitude,
-        });
 
 
       } catch (error) {
@@ -97,14 +99,17 @@ export default function MapScreen({ route, navigation }) {
           mapType="satellite"
         >
           <Marker
-            coordinate={{ longitude: origin.longitude, latitude: origin.latitude }}
+            coordinate={{
+              longitude: locationMarker.longitude,
+              latitude: locationMarker.latitude,
+            }}
           />
           <MapViewDirections
             origin={origin}
             destination={distination}
             apikey={"AIzaSyArv0zDFWad2xEFtI9p4nVc-fhocwEHioY"}
             strokeWidth={4}
-            strokeColor="rgb(15,83,255)" 
+            strokeColor="rgb(15,83,255)"
             mode="DRIVING"
           />
           {operationsList.map((op, k) => (
@@ -144,8 +149,10 @@ export default function MapScreen({ route, navigation }) {
             <Pressable
               style={[styles.button, styles.buttonOpen]}
               onPress={() => {
-                setModalVisible(!modalVisible)
-                navigation.navigate("operationDetailScreen", { operationDetail })
+                setModalVisible(!modalVisible);
+                navigation.navigate("operationDetailScreen", {
+                  operationDetail,
+                });
               }}
             >
               <Text style={styles.textStyle}>Voir Detail</Text>
@@ -153,8 +160,11 @@ export default function MapScreen({ route, navigation }) {
             <Pressable
               style={[styles.button, styles.buttonGps]}
               onPress={() => {
-                setModalVisible(!modalVisible)
-                setDistination({ longitude: operationDetail.lng, latitude: operationDetail.lat })
+                setModalVisible(!modalVisible);
+                setDistination({
+                  longitude: operationDetail.lng,
+                  latitude: operationDetail.lat,
+                });
               }}
             >
               <Text style={styles.textStyle}>Itinéraire</Text>
