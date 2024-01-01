@@ -119,7 +119,7 @@ function LoginScreen({ navigation }) {
                   navigation.navigate("Dashboard");
                 }).catch((err) => {
                   setErrorCatched(true);
-                  setErrorMessage(JSON.stringify(err));
+                  setErrorMessage(err.response.data.message);
                 })
               }
               }

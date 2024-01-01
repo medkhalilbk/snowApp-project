@@ -31,8 +31,10 @@ export default function MapScreen({ route, navigation }) {
   useEffect(() => {
     const getLocation = async () => {
       try {
-        const cordsMarkerLocation  = await Location.getCurrentPositionAsync({});
+        const cordsMarkerLocation = await Location.getCurrentPositionAsync({});
         setLocationMarker(cordsMarkerLocation.coords)
+        console.log(`from locationMarker ${JSON.stringify(locationMarker)}`)
+        console.log(`from cordsMarkerLocation ${JSON.stringify(cordsMarkerLocation.coords)}`)
 
         let newLocation;
         if (route.params?.operationsCords) {
@@ -41,6 +43,7 @@ export default function MapScreen({ route, navigation }) {
         } else {
           const { coords } = await Location.getCurrentPositionAsync({});
           newLocation = coords;
+
           setLocation(newLocation);
         }
 
@@ -82,7 +85,7 @@ export default function MapScreen({ route, navigation }) {
         <MapView
           onMapReady={() => {
             mapRef.current.getCamera().then((res) => {
-              console.log(res);
+              // console.log(res);
             });
           }}
           showsUserLocation={false}
@@ -98,14 +101,15 @@ export default function MapScreen({ route, navigation }) {
           }}
           mapType="satellite"
         >
-          <Marker
-            coordinate={{
-              longitude: locationMarker.longitude,
-              latitude: locationMarker.latitude,
-            }}
-          />
+          {locationMarker &&
+            <Marker
+              coordinate={{
+                longitude: locationMarker.longitude,
+                latitude: locationMarker.latitude,
+              }}
+            />}
           <MapViewDirections
-            origin={origin}
+            origin={locationMarker}
             destination={distination}
             apikey={"AIzaSyArv0zDFWad2xEFtI9p4nVc-fhocwEHioY"}
             strokeWidth={4}
