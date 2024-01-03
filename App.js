@@ -26,16 +26,17 @@ const Stack = createStackNavigator();
       <NavigationContainer>
         <Stack.Navigator>
           <Stack.Screen
+            name="Auth"
+            component={AuthStack}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
             name="Dashboard"
             component={DashboardStack}
             options={{ headerShown: false }}
           />
 
-          <Stack.Screen
-            name="Auth"
-            component={AuthStack}
-            options={{ headerShown: false }}
-          />
+          
         </Stack.Navigator>
       </NavigationContainer>
     </Provider>

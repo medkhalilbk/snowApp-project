@@ -98,12 +98,14 @@ export default function MapScreen({ route, navigation }) {
           }}
           mapType="satellite"
         >
-          <Marker
-            coordinate={{
-              longitude: locationMarker.longitude,
-              latitude: locationMarker.latitude,
-            }}
-          />
+          {locationMarker && (
+            <Marker
+              coordinate={{
+                longitude: locationMarker.longitude,
+                latitude: locationMarker.latitude,
+              }}
+            />
+          )}
           <MapViewDirections
             origin={origin}
             destination={distination}
