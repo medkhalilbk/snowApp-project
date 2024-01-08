@@ -21,13 +21,13 @@ console.log(userInfos);
    
   return ( 
       <Stack.Navigator>
-        {isLoading && (
+        {/* {isLoading && (
           <Stack.Screen
             name="splashScreen"
             component={SplashScreen}
             options={{ headerShown: false }}
           />
-        )}
+        )} */}
         <Stack.Screen
           name="LoginScreen"
           component={LoginScreen}
