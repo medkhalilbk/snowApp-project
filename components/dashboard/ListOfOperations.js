@@ -1,52 +1,54 @@
 import React, { useMemo, useState } from 'react'
-import { Dimensions, SafeAreaView, ScrollView, TextInput, TouchableOpacity, View, FlatList, ActivityIndicator } from 'react-native'
-import CardOfOperation from './cardOfOperation'
+import { Dimensions, SafeAreaView, ScrollView, TextInput, TouchableOpacity, View, FlatList, ActivityIndicator,Text } from 'react-native'
+ 
 import { FontAwesome, AntDesign } from '@expo/vector-icons';
 import { useDispatch, useSelector } from 'react-redux';
 import { getAllOperations } from '../../axios/dashboard';
-import { updateOperationsAction } from '../../redux/actions/operations';
-import * as Crypto from "expo-crypto";
+import { updateOperationsAction } from '../../redux/actions/operations'; 
 import { useEffect } from 'react';
+import RunHeader from './runHeader';
+import ClientDetail from './cardOfOperation';
 
 function ListOfOperations({ navigation }) {
-  const operationsList = useSelector(
-    (state) => state.operations.operationsList
-  );
-  React.useEffect(() => { setOperationListState(operationsList) }, [])
-  const [maxPage, setMaxPage] = useState(1);
+  const operationsList = useSelector((state) => state.operations?.runDetails);
+  React.useEffect(() => {
+    setOperationListState(operationsList?.addresses);
+  }, []);
+   
   const userId = useSelector((state) => state.user.informations.id);
   const [searchInput, setSearchInput] = useState('');
   const [filteredOperationList, setFilteredOperationList] = useState([]);
   const [operationListState, setOperationListState] = useState([])
+  const [showClients, setShowClients] = useState(false)
   const dispatch = useDispatch();
   const [page, setPage] = useState(1);
   React.useEffect(() => {
     setOperationListState(operationsList);
-    setFilteredOperationList(operationsList); // Initialize filtered list with all operations
+    setFilteredOperationList(operationsList);  
   }, [operationsList]);
 
   function fetchOperations() {
-    if (page <= maxPage) {
+   
       getAllOperations({ userId: userId }, page)
         .then((res) => {
-          dispatch(updateOperationsAction(res.data));
-          setPage(page + 1);
-          setMaxPage(res.last_page);
-          setOperationListState([...operationListState, ...res.data])
+          
+          dispatch(updateOperationsAction(res)); 
+          setOperationListState(res.data) 
         })
         .catch((err) => {
           console.log(err);
         });
-    }
+   
 
   }
-  const ListEndLoader = () => {
-
-    return <ActivityIndicator size={"large"} />;
-  };
+ 
+  React.useEffect(() => {
+    fetchOperations()
+  }, [])
 
   useEffect(() => {
-    if (searchInput.trim() === '') {
+     
+   /*  if (searchInput.trim() === '') {
       setFilteredOperationList(operationListState);
     } else {
       const filtered = operationListState.filter(item =>
@@ -54,43 +56,30 @@ function ListOfOperations({ navigation }) {
       );
       setFilteredOperationList(filtered);
       console.log(filtered)
-    }
+    } */
   }, [searchInput, operationListState]);
 
-
-  const RenderItem = ({ item, k }) => {
-
+  const RenderItem = ({ item, k }) => {  
     return (
-
-        <CardOfOperation
-          navigation={navigation}
-          key={k}
-          id={item.id}
-          isDone={item.is_done}
-          title={item.title}
-          cords={{ latitude: item.lat, longitude: item.lng }}
-          start_date={item.start_date + " | " + item.start_hour}
-          addresse={item.ville + ", " + item.addresse}
-        /* description={removeTags(op.description)} */
-        />
-      )
-  };
-
-
-
-
+      <ClientDetail item={item} navigation={navigation} key={k} id={item.id} />
+    );
+  }
+  
+  
+  React.useEffect(() => { 
+  }, [operationListState]);
+  
   return (
     <SafeAreaView style={{ flex: 2 }}>
       <View
         style={{
           alignItems: "center",
-          marginBottom: 20,
+          marginVertical: 20,
           flexDirection: "row",
           gap: 12,
           paddingLeft: 12,
           paddingRight: 12,
         }}
-
       >
         <TextInput
           placeholder="Chercher une opération"
@@ -133,16 +122,21 @@ function ListOfOperations({ navigation }) {
           <AntDesign name="filter" size={17} color="white" />
         </TouchableOpacity>
       </View>
-      <FlatList
-        data={filteredOperationList}
-        renderItem={({ item, k }) => <RenderItem item={item} key={k} />}
-        keyExtractor={(item, index) => item?.id?.toString() || index.toString()}
-        onEndReached={() => {
-          fetchOperations();
-        }}
-        onEndReachedThreshold={0.8}
-        ListFooterComponent={ListEndLoader}
+
+      <RunHeader
+        setShowClients={setShowClients}
+        title={operationsList.runDetails?.nom}
       />
+
+      {showClients && (
+        <FlatList
+          data={operationListState?.runDetails.addresses}
+          renderItem={({ item, k }) => <RenderItem item={item} key={k} />}
+          keyExtractor={(item, index) =>
+            item?.id?.toString() || index.toString()
+          } 
+        />
+      )}
     </SafeAreaView>
   );
 }

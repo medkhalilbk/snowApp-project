@@ -23,9 +23,7 @@ export default function MapScreen({ route, navigation }) {
   const [errorMsg, setErrorMsg] = useState(null);
   const mapRef = useRef(null);
   const dispatch = useDispatch();
-  const operationsList = useSelector(
-    (state) => state.operations.operationsList
-  );
+  const operationsList = useSelector((state) => state.operations?.runDetails);
 
 
   useEffect(() => {
@@ -117,7 +115,7 @@ export default function MapScreen({ route, navigation }) {
             strokeColor="rgb(15,83,255)"
             mode="DRIVING"
           />
-          {operationsList.map((op, k) => (
+         {/*  {operationsList.map((op, k) => (
             <Marker
               onPress={() => {
                 setModalVisible(true);
@@ -136,7 +134,7 @@ export default function MapScreen({ route, navigation }) {
                 }
               />
             </Marker>
-          ))}
+          ))} */}
         </MapView>
       )}
       <Modal
