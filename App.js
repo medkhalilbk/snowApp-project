@@ -25,11 +25,11 @@ const Stack = createStackNavigator();
     <Provider store={store}>
       <NavigationContainer>
         <Stack.Navigator>
-{/*           <Stack.Screen
+          <Stack.Screen
             name="Auth"
             component={AuthStack}
             options={{ headerShown: false }}
-          /> */}
+          />
           <Stack.Screen
             name="Dashboard"
             component={DashboardStack}

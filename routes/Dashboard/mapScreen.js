@@ -24,10 +24,16 @@ export default function MapScreen({ route, navigation }) {
   const mapRef = useRef(null);
   const dispatch = useDispatch();
   const operationsList = useSelector((state) => state.operations?.runDetails);
-
+  const [list, setList] = useState(null)
 
   useEffect(() => {
     const getLocation = async () => {
+      setList([].concat(...operationsList.runDetails.allAdresses))
+   
+      // console.log("فثسف")
+
+      // console.log([].concat(...operationsList.runDetails.allAdresses));
+
       try {
         const cordsMarkerLocation = await Location.getCurrentPositionAsync({});
         setLocationMarker(cordsMarkerLocation.coords)
@@ -115,7 +121,8 @@ export default function MapScreen({ route, navigation }) {
             strokeColor="rgb(15,83,255)"
             mode="DRIVING"
           />
-         {/*  {operationsList.map((op, k) => (
+          {list && list.map((op, k) => (
+
             <Marker
               onPress={() => {
                 setModalVisible(true);
@@ -123,18 +130,20 @@ export default function MapScreen({ route, navigation }) {
               }}
               key={k}
               coordinate={{ longitude: op.lng, latitude: op.lat }}
-              title={op.title}
+              title={op.client}
             >
               <Image
                 style={{ width: 50, height: 50, justifyContent: "center" }}
                 source={
-                  op.is_done === 1
-                    ? require("../../assets/map_assets/green_pin.png")
-                    : require("../../assets/map_assets/red_pin.png")
+                  op.is_set===1?
+                    op.status === 0 
+                      ? require("../../assets/map_assets/green_pin.png")
+                      : require("../../assets/map_assets/red_pin.png")
+                  : console.log("test")
                 }
               />
             </Marker>
-          ))} */}
+          ))}
         </MapView>
       )}
       <Modal
@@ -148,7 +157,7 @@ export default function MapScreen({ route, navigation }) {
       >
         <View style={styles.centeredView}>
           <View style={styles.modalView}>
-            <Text style={styles.modalText}>{operationDetail.title}</Text>
+            <Text style={styles.modalText}>{operationDetail.nom_complet}</Text>
             <Pressable
               style={[styles.button, styles.buttonOpen]}
               onPress={() => {
