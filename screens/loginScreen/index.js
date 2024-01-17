@@ -21,7 +21,6 @@ function LoginScreen({ navigation }) {
   const [errorMessage, setErrorMessage] = useState(null);
   const dispatch = useDispatch()
   const user = useSelector(state => state.user)
-  React.useEffect(() => { }, [errorMessage, errorCatched]);
   const toggleShowPassword = () => {
     setShowPassword(!showPassword);
   };
