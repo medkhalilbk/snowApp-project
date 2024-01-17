@@ -193,7 +193,7 @@ export default function MapScreen({ route, navigation }) {
                       if (item.id === operationDetail.id) {
                         item.is_set = 1
                         item.status = 0
-                      }
+                      } 
                     })
                     // setList(updatedList)
                     // setModalVisible(!modalVisible)
