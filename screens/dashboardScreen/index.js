@@ -5,16 +5,23 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { FontAwesome } from "@expo/vector-icons";
 import MapScreen from "../../routes/Dashboard/mapScreen";
 import OperationScreen from "./OperationScreen";
-import { Feather } from '@expo/vector-icons'; 
+import { Feather } from '@expo/vector-icons';
 import { AntDesign } from "@expo/vector-icons";
 import RightNotification from "../../components/header/rightNotification";
 import OperationDetailScreen from "./OperationDetailScreen";
+import { useEffect } from "react";
+import { statusChnagingListner } from "../../redux/actions/gps";
+import { useSelector } from "react-redux";
+import { useState } from "react";
+import socket from "../../utils/socket";
 
- 
+
 
 const Tab = createBottomTabNavigator();
 
-export default function DashboardScreen() {
+export default function DashboardScreen({ navigation }) {
+
+
   return (
     <Tab.Navigator>
       <Tab.Screen
@@ -41,7 +48,7 @@ export default function DashboardScreen() {
               <Feather name="settings" size={28} color="white" />
             </View>
           ),
-          headerRight: () => <RightNotification />,
+          headerRight: () => <RightNotification navigation={navigation} />,
         }}
       />
       <Tab.Screen
@@ -71,7 +78,7 @@ export default function DashboardScreen() {
           headerRight: () => <RightNotification />,
         }}
       />
-       
+
     </Tab.Navigator>
   );
 }

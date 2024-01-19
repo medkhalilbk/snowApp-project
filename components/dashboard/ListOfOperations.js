@@ -1,74 +1,106 @@
 import React, { useMemo, useState } from 'react'
-import { Dimensions, SafeAreaView, ScrollView, TextInput, TouchableOpacity, View, FlatList, ActivityIndicator,Text } from 'react-native'
- 
+import { Dimensions, SafeAreaView, ScrollView, TextInput, TouchableOpacity, View, FlatList, ActivityIndicator, Text } from 'react-native'
+
 import { FontAwesome, AntDesign } from '@expo/vector-icons';
 import { useDispatch, useSelector } from 'react-redux';
 import { getAllOperations } from '../../axios/dashboard';
-import { updateOperationsAction } from '../../redux/actions/operations'; 
+import { updateOperationsAction, updateTaskInRedux } from '../../redux/actions/operations';
 import { useEffect } from 'react';
 import RunHeader from './runHeader';
 import ClientDetail from './cardOfOperation';
+import socket from '../../utils/socket';
 
 function ListOfOperations({ navigation }) {
   const operationsList = useSelector((state) => state.operations?.runDetails);
   React.useEffect(() => {
     setOperationListState(operationsList?.addresses);
   }, []);
-   
+
   const userId = useSelector((state) => state.user.informations.id);
   const [searchInput, setSearchInput] = useState('');
   const [filteredOperationList, setFilteredOperationList] = useState([]);
   const [operationListState, setOperationListState] = useState([])
   const [showClients, setShowClients] = useState(false)
   const dispatch = useDispatch();
+  const [isChanging, setIsChanging] = useState(false)
   const [page, setPage] = useState(1);
   React.useEffect(() => {
     setOperationListState(operationsList);
-    setFilteredOperationList(operationsList);  
+    setFilteredOperationList(operationsList);
   }, [operationsList]);
 
+  useEffect(() => {
+
+    // console.log(operationsList)
+
+    //  const test= statusChnagingListner()
+    // console.log(response)
+  }, [])
   function fetchOperations() {
-   
-      getAllOperations({ userId: userId }, page)
-        .then((res) => {
-          
-          dispatch(updateOperationsAction(res)); 
-          setOperationListState(res.data) 
-        })
-        .catch((err) => {
-          console.log(err);
+
+    getAllOperations({ userId: userId }, page)
+      .then((res) => {
+
+        dispatch(updateOperationsAction({
+          runDetails: res,
+          isChanging: isChanging
+        }));
+        setOperationListState(res.data)
+        let setTaskFromSocket
+        socket.on('resultOfCleaning', function (msg) {
+          setTaskFromSocket=msg.tasks
+          console.log(`from sockett  front ${JSON.stringify(msg.tasks)}`);
+          res?.runDetails?.addresses.map((clientAdress) => {
+            clientAdress.clientAdresses.filter((target) => {
+              if (target.id === msg.tasks) {
+                target.status = 0
+                console.log("updatedTask")
+                setIsChanging(!isChanging)
+              }
+            })
+          })
+
+          const payload = {
+            runDetails: res,
+            isChanging: !isChanging
+          }
+          dispatch(updateOperationsAction(payload));
+          dispatch(updateTaskInRedux(setTaskFromSocket))
         });
-   
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+
 
   }
- 
+
   React.useEffect(() => {
     fetchOperations()
   }, [])
 
   useEffect(() => {
-     
-   /*  if (searchInput.trim() === '') {
-      setFilteredOperationList(operationListState);
-    } else {
-      const filtered = operationListState.filter(item =>
-        item.title.toLowerCase().includes(searchInput.toLowerCase())
-      );
-      setFilteredOperationList(filtered);
-      console.log(filtered)
-    } */
+    /*  if (searchInput.trim() === '') {
+       setFilteredOperationList(operationListState);
+     } else {
+       const filtered = operationListState.filter(item =>
+         item.title.toLowerCase().includes(searchInput.toLowerCase())
+       );
+       setFilteredOperationList(filtered);
+       console.log(filtered)
+     } */
   }, [searchInput, operationListState]);
 
-  const RenderItem = ({ item, k }) => {  
+  const RenderItem = ({ item, k }) => {
     return (
       <ClientDetail item={item} navigation={navigation} key={k} id={item.id} />
     );
   }
-  
-  
-  React.useEffect(() => { 
+
+
+  React.useEffect(() => {
   }, [operationListState]);
-  
+
   return (
     <SafeAreaView style={{ flex: 2 }}>
       <View
@@ -125,7 +157,7 @@ function ListOfOperations({ navigation }) {
 
       <RunHeader
         setShowClients={setShowClients}
-        title={operationsList.runDetails?.nom}
+        title={operationsList.runDetails?.name}
       />
 
       {showClients && (
@@ -134,7 +166,7 @@ function ListOfOperations({ navigation }) {
           renderItem={({ item, k }) => <RenderItem item={item} key={k} />}
           keyExtractor={(item, index) =>
             item?.id?.toString() || index.toString()
-          } 
+          }
         />
       )}
     </SafeAreaView>

@@ -1,4 +1,4 @@
-import { UPDATE_LASTPAGE_OF_OPERATION, UPDATE_OPERATIONS } from "../../types"; 
+import { UPDATE_LASTPAGE_OF_OPERATION, UPDATE_OPERATIONS, UPDATE_TASK } from "../../types"; 
 export function updateOperationsAction(operationsArray) { 
  
   return {
@@ -11,4 +11,11 @@ export function updateOperationsPagesAction(lastPage) {
     type: UPDATE_LASTPAGE_OF_OPERATION,
     payload: lastPage,
   };
+}
+
+export function updateTaskInRedux(adresse){
+  return{
+    type:UPDATE_TASK,
+    payload : adresse
+  }
 }

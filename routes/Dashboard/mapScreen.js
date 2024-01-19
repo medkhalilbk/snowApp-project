@@ -26,12 +26,14 @@ export default function MapScreen({ route, navigation }) {
   const mapRef = useRef(null);
   const dispatch = useDispatch();
   const operationsList = useSelector((state) => state.operations?.runDetails);
+  const reduxListner = useSelector((state) => state.operations?.isChanging);
+
+  const adressIdChanigin = useSelector((state) => state.operations?.taskID);
   const [list, setList] = useState([].concat(...operationsList.runDetails.allAdresses))
   const [statusValue, setStatusValue] = useState(0)
   useEffect(() => {
 
     const getLocation = async () => {
-      setList([].concat(...operationsList.runDetails.allAdresses))
       try {
         const cordsMarkerLocation = await Location.getCurrentPositionAsync({});
         setLocationMarker(cordsMarkerLocation.coords)
@@ -57,15 +59,30 @@ export default function MapScreen({ route, navigation }) {
     };
 
     getLocation();
-  }, [route.params]);
+  }, [route.params,adressIdChanigin]);
 
   useEffect(() => {
 
     if (route.params?.operationsCords) {
       setLocation(route.params.operationsCords);
     }
-  }, [route.params]);
 
+
+
+
+  }, [route.params,adressIdChanigin]);
+
+  useEffect(() => {
+    console.log("salmou 3alykom raw tbadelt loumouor w hedha mch ma39oul")
+    console.log(adressIdChanigin)
+    list.filter((item) => {
+      if (item.id == adressIdChanigin) {
+        item.is_set = 1
+        item.status = 0
+        
+      }
+    })
+  }, [adressIdChanigin])
 
   useEffect(() => {
     if (location) {
@@ -105,15 +122,13 @@ export default function MapScreen({ route, navigation }) {
             });
           }}
           showsUserLocation={true}
-          userLocationPriority="low"
+          userLocationPriority="high"
+          followsUserLocation={true}
+
           onUserLocationChange={async (e) => {
-            const cordsMarkerLocation = await Location.getCurrentPositionAsync({});
-            setLocationMarker(cordsMarkerLocation.coords)
           }}
           loadingEnabled={true}
           ref={mapRef}
-          customMapStyle={customMapStyle}
-
           zoomEnabled={true}
           style={styles.map}
           initialRegion={{
@@ -124,14 +139,14 @@ export default function MapScreen({ route, navigation }) {
           }}
           mapType="satellite"
         >
-          {locationMarker && (
+          {/* {locationMarker && (
             <Marker
               coordinate={{
                 longitude: locationMarker.longitude,
                 latitude: locationMarker.latitude,
               }}
             />
-          )}
+          )} */}
           <MapViewDirections
             origin={locationMarker}
             destination={distination}
@@ -144,6 +159,7 @@ export default function MapScreen({ route, navigation }) {
 
             <Marker
               onPress={() => {
+                console.log(op)
                 setModalVisible(true);
                 setOperationDetail(op);
               }}
@@ -193,7 +209,7 @@ export default function MapScreen({ route, navigation }) {
                       if (item.id === operationDetail.id) {
                         item.is_set = 1
                         item.status = 0
-                      } 
+                      }
                     })
                     // setList(updatedList)
                     // setModalVisible(!modalVisible)
@@ -221,7 +237,7 @@ export default function MapScreen({ route, navigation }) {
                 :
                 <View style={styles.RemoveSnowButton}>
                   <AntDesign name="closecircleo" size={24} color={whiteColor} />
-                  <Text style={styles.textStyle}>Enneigé </Text>
+                  <Text style={styles.textStyle}>test </Text>
                 </View>}
             </Pressable>
             <Pressable

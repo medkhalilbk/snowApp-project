@@ -1,8 +1,14 @@
 import React from 'react'
 import { View, Text } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
+import { FontAwesome, Ionicons } from '@expo/vector-icons';
+import * as SecureStore from 'expo-secure-store';
 
-function RightNotification() {
+function RightNotification({ navigation }) {
+
+  async function logOut() {
+    await SecureStore.setItemAsync("user", "loged out");
+    navigation.navigate('Auth')
+  }
   return (
     <View
       style={{
@@ -13,20 +19,9 @@ function RightNotification() {
         alignItems: "center",
       }}
     >
-      <Ionicons name="notifications-outline" size={30} color="white" />
-      <View
-        style={{
-          backgroundColor: "#FF6624",
-          width: 18,
-          height: 18,
-          borderRadius: 22,
-          alignItems: "center",
-          position: "absolute",
-          left: 13,
-        }}
-      >
-        <Text style={{ color: "#F5F5F5" }}>2</Text>
-      </View>
+
+      <FontAwesome name="power-off" size={24} color="#FF6624" onPress={() => { logOut() }} />
+
     </View>
   );
 }
